@@ -19,7 +19,7 @@ var defaultCnf = DrawingConfig{
 		LineSpacing: ptrInt(10),
 	},
 	Category: &TextOption{
-		Start:      &Point{X: 126, Y: 119},
+		Start:      &Point{X: 126, Y: 451},
 		FgHexColor: "#8D8D8D",
 		FontSize:   42,
 		FontStyle:  fontfamily.Regular,
@@ -42,6 +42,15 @@ var defaultCnf = DrawingConfig{
 		BoxPadding: &Padding{Top: 6, Right: 10, Bottom: 6, Left: 10},
 		BoxSpacing: ptrInt(6),
 		BoxAlign:   box.AlignRight,
+	},
+	SiteTitle: &CustomTextOption{
+		CustomValue: "",
+		TextOption: TextOption{
+			Start:      &Point{X: 126, Y: 441},
+			FgHexColor: "#8D8D8D",
+			FontSize:   22,
+			FontStyle:  fontfamily.Regular,
+		},
 	},
 }
 
@@ -71,6 +80,11 @@ func Defaulting(cnf *DrawingConfig, tplImg string) {
 		cnf.Tags = &BoxTextsOption{}
 	}
 	defaultTags(cnf.Tags)
+
+	if cnf.SiteTitle == nil {
+		cnf.SiteTitle = &CustomTextOption{}
+	}
+	defaultSiteTitle(cnf.SiteTitle)
 }
 
 func defaultingTitle(mto *MultiLineTextOption) {
@@ -110,6 +124,10 @@ func defaultTags(bto *BoxTextsOption) {
 	if bto.BoxAlign == "" {
 		bto.BoxAlign = defaultCnf.Tags.BoxAlign
 	}
+}
+
+func defaultSiteTitle(cto *CustomTextOption) {
+	setArgsAsDefaultTextOption(&cto.TextOption, &defaultCnf.SiteTitle.TextOption)
 }
 
 func setArgsAsDefaultTextOption(to *TextOption, dto *TextOption) {

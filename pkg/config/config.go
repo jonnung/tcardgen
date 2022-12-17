@@ -6,11 +6,17 @@ import (
 )
 
 type DrawingConfig struct {
-	Template string               `json:"template,omitempty"`
-	Title    *MultiLineTextOption `json:"title,omitempty"`
-	Category *TextOption          `json:"category,omitempty"`
-	Info     *TextOption          `json:"info,omitempty"`
-	Tags     *BoxTextsOption      `json:"tags,omitempty"`
+	Template  string               `json:"template,omitempty"`
+	Title     *MultiLineTextOption `json:"title,omitempty"`
+	Category  *TextOption          `json:"category,omitempty"`
+	Info      *TextOption          `json:"info,omitempty"`
+	Tags      *BoxTextsOption      `json:"tags,omitempty"`
+	SiteTitle *CustomTextOption    `json:"siteTitle,omitempty"`
+}
+
+type CustomTextOption struct {
+	TextOption
+	CustomValue string `json:"customValue,omitempty"`
 }
 
 type TextOption struct {

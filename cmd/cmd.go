@@ -174,7 +174,7 @@ func generateTCard(contentPath, outPath string, tpl image.Image, ffa *fontfamily
 
 	var tags []string
 	for _, t := range fm.Tags {
-		tags = append(tags, strings.Title(t))
+		tags = append(tags, fmt.Sprintf("#%s", t))
 	}
 
 	if err := c.DrawTextAtPoint(
@@ -187,16 +187,16 @@ func generateTCard(contentPath, outPath string, tpl image.Image, ffa *fontfamily
 	); err != nil {
 		return err
 	}
+	//if err := c.DrawTextAtPoint(
+	//	strings.ToUpper(fm.Category),
+	//	*cnf.Category.Start,
+	//	canvas.FgHexColor(cnf.Category.FgHexColor),
+	//	canvas.FontFaceFromFFA(ffa, cnf.Category.FontStyle, cnf.Category.FontSize),
+	//); err != nil {
+	//	return err
+	//}
 	if err := c.DrawTextAtPoint(
-		strings.ToUpper(fm.Category),
-		*cnf.Category.Start,
-		canvas.FgHexColor(cnf.Category.FgHexColor),
-		canvas.FontFaceFromFFA(ffa, cnf.Category.FontStyle, cnf.Category.FontSize),
-	); err != nil {
-		return err
-	}
-	if err := c.DrawTextAtPoint(
-		fmt.Sprintf("%s%s%s", fm.Author, cnf.Info.Separator, fm.Date.Format("Jan 2")),
+		fm.Date.Format("2006-01-02"),
 		*cnf.Info.Start,
 		canvas.FgHexColor(cnf.Info.FgHexColor),
 		canvas.FontFaceFromFFA(ffa, cnf.Info.FontStyle, cnf.Info.FontSize),
@@ -214,6 +214,24 @@ func generateTCard(contentPath, outPath string, tpl image.Image, ffa *fontfamily
 		canvas.FontFaceFromFFA(ffa, cnf.Tags.FontStyle, cnf.Tags.FontSize),
 	); err != nil {
 		return err
+	}
+
+	if cnf.SiteTitle.CustomValue != "" {
+		var siteTitle string
+		if fm.Category != "" {
+			siteTitle = fmt.Sprintf("%s / %s", cnf.SiteTitle.CustomValue, strings.ToUpper(fm.Category))
+		} else {
+			siteTitle = cnf.SiteTitle.CustomValue
+		}
+
+		if err := c.DrawTextAtPoint(
+			siteTitle,
+			*cnf.SiteTitle.TextOption.Start,
+			canvas.FgHexColor(cnf.SiteTitle.TextOption.FgHexColor),
+			canvas.FontFaceFromFFA(ffa, cnf.SiteTitle.TextOption.FontStyle, cnf.SiteTitle.TextOption.FontSize),
+		); err != nil {
+			return err
+		}
 	}
 
 	return c.SaveAsPNG(outPath)
